@@ -1,0 +1,23 @@
+{% load static %}
+
+<nav class="navbar navbar-expand-sm">
+    <div class="container">
+        <a href={% url "home" %} class="navbar-brand d-flex align-items-center">
+            <img src={% static "img/mockbank_logo_minimal.png" %} alt="MockBank Logo" width="150px">
+        </a>
+        <a href={% url "contact_us" %} class="nav-link text-dark fs-5 d-md-none">Entre em contato</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-end" id="menuNavbar">
+            <div class="navbar-nav float-end">
+                <a href={% url "contact_us" %} class="nav-link text-dark fs-5 d-none d-md-block">Entre em contato</a>
+                <a href="#" class="nav-link text-dark fs-5">Entrar</a>
+                <div class="vr mt-2 d-none d-sm-block" style="height: 30px;"></div>
+                <a href="#" class="nav-link text-dark fs-5">Criar conta</a>
+            </div>
+        </div>
+
+    </div>
+</nav>

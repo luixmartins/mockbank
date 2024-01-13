@@ -1,0 +1,32 @@
+{% extends "global/base.html" %}
+
+{% block content %}
+
+<main style="margin-top: 30px;">
+    <div class="container">
+        <h1>Confirmação de contato</h1>
+        <hr>
+        <p>
+            Olá <strong>{{name}}</strong>, 
+        </p>
+        
+        <p>
+            Obrigado por entrar em contato conosco, faremos o possível para retornar o contato em no máximo 48 horas.
+        </p>
+        
+        <p>
+            Cordialmente, 
+            <br>
+            Central de Relacionamento MockBank. 
+        </p>
+    
+        <p>
+            <a href={% url "home" %} class="btn btn-dark">
+                Voltar à página principal 
+            </a>
+        </p>
+    </div>
+</main>
+
+
+{% endblock content %}

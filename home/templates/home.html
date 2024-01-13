@@ -1,0 +1,42 @@
+{% extends "global/base.html" %}
+{% load static %}
+
+{% block content %}
+<nav class="navbar navbar-expand-sm">
+    <div class="container">
+        <a href="#" class="navbar-brand d-flex align-items-center">
+            <img src={% static "img/mockbank_logo_minimal.png" %} alt="MockBank Logo" width="150px">
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-end" id="menuNavbar">
+            <div class="navbar-nav float-end">
+                <a href=# class="nav-link text-dark fs-5">Entrar</a>
+                <div class="vr mt-2 d-none d-sm-block" style="height: 30px;"></div>
+                <a href="#" class="nav-link text-dark fs-5">Criar conta</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="container  mt-4 content-section ">
+    <div class="row align-items-center">
+        <div class="col-12 col-md-6 text-center text-md-start ">
+            <h1 class="display-4">Crédito rápido, <br>
+                simples
+            </h1>
+        </div>
+        <div class="col-md-5 d-none d-md-block text-end me-lg-4">
+            <i class="bi bi-cash-coin text-dark" style="font-size: 100px;"></i>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-8 col-md-12 text-center text-md-start d-grid d-md-block btn-simulate ms-md-5">
+            <a href="#" class="btn btn-dark btn-lg">Simular agora</a>
+        </div>
+    </div>
+</div>
+{% endblock content %}

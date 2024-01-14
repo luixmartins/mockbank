@@ -17,6 +17,7 @@ def contact_us(request):
 
             return render(request, 'contact_confirm.html', {'name': name})
         
+        print(form.errors)
         return render(request, 'contact.html', {'form': form})
     
     form = ContactForm()

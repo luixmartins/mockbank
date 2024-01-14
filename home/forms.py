@@ -1,5 +1,7 @@
 from django import forms 
 from django.core.exceptions import ValidationError
+from django.core.validators import EmailValidator
+
 import re 
 
 from home.models import ContactHome
@@ -15,20 +17,20 @@ class ContactForm(forms.ModelForm):
             "email": "Email", 
             "message": "Mensagem", 
         }
-
+        
         widgets= {
             'name': forms.TextInput(attrs={
                 'class': 'form-control', 
                 'id': 'txtNome', 
                 'placeholder': " ", 
-                'autofocus': True,
             }), 
             'email': forms.EmailInput(attrs={
                 'class': 'form-control',
                 'id': 'txtEmail', 
                 'placeholder': " ", 
                 'autofocus': True, 
-            }), 
+            }
+            ), 
             'message': forms.Textarea(attrs={
                 'class': 'form-control', 
                 'id': 'txtmensagem', 
@@ -48,8 +50,8 @@ class ContactForm(forms.ModelForm):
                 'name', 
                 ValidationError(
                     'Email inválido', 
-                    code='invalid'
-                )
+                    code='invalid', 
+                ), 
             )
         
         return email 

@@ -1,5 +1,59 @@
 {% extends "global/base.html" %}
 
 {% block content %}
+<main>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-12 col-sm-10 col-md-8  col-lg-5">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="mt-2">Seja bem vindo!</h2>
+                        <hr>
+                        <p>Entre para continuar utilizando nossos serviços</p>
 
+                        <form action="" method="post">
+                            {% csrf_token %}
+                            <div class="col-12 form-floating" style="margin-top: 40px;">
+                                {{ form.username }}
+                                <label for="txtUser">
+                                    Usuário
+                                </label>
+
+                                <div class="col-12 form-floating mt-3">
+                                    {{ form.password }}
+                                    <label for="txtPassword">
+                                        Senha
+                                    </label>
+                                </div>
+
+                                <div class="col-12">
+                                    {% if error %}
+                                        <p class="text-danger mt-2">{{error}}</p>
+                                    {% endif %}
+                                </div>
+
+                                <div class="col-12 mt-4 text-center mb-4">
+                                    <button class="btn btn-lg btn-dark w-100" type="submit">
+                                        Entrar
+                                    </button>
+                                </div>
+
+                                <hr>
+
+                                <div class="col-12 mt-4">
+                                    <p>Não possui uma conta? <a
+                                            class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
+                                            href="#">Registar agora</a></p>
+                                    <p>Esqueceu sua senha? <a
+                                            class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
+                                            href="#">Alterar senha</a></p>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
 {% endblock content %}

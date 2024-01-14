@@ -1,11 +1,13 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+
+# Create your models here.
+from django.db import models 
+from django.contrib.auth.models import User 
 
 import uuid 
 
-class User(AbstractUser):
+class User(models.Model):
     user_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user_phone = models.CharField(max_length=20, blank=True)
+    user_phone = models.CharField(max_length=30, blank=True)
 
-    def __str__(self) -> str:
-        return self.username 
+    owner = models.OneToOneField(User, on_delete=models.CASCADE)

@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
 body {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Roboto', sans-serif !important;
 }
 
 .content-section {
@@ -12,3 +12,17 @@ body {
 .btn-simulate {
     margin-top: 120px;
 }
+
+.errorlist {
+    margin-top: 20px;
+    margin-bottom: -10px;
+    margin-left: -25px;
+    list-style: none;
+    font-size: var(--smaller-font-size);
+    color: tomato;
+  }
+
+.errorlist.nonfield {
+    color: inherit;
+}
+  

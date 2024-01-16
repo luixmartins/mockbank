@@ -1,5 +1,7 @@
+from typing import Any
 from django import forms 
 from django.contrib.auth.models import User 
+from django.contrib.auth.forms import AuthenticationForm
 from django.core.exceptions import ValidationError
 
 from user.models import User as UserModel 
@@ -8,31 +10,19 @@ import re
 
 EMAIL_REGEX = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
 
-class UserLoginForm(forms.Form):
-    username = forms.CharField(widget=forms.TextInput(
-        attrs={
-            'class': 'form-control', 
-            'placeholder': ' ', 
-            'id': 'txtUser', 
-            'required': True, 
-        }
-    ))
+class UserLoginForm(AuthenticationForm):
+    def __init__(self,  *args, **kwargs):
+        super(UserLoginForm, self).__init__(*args, **kwargs)
 
-    password = forms.CharField(widget=forms.PasswordInput(
-        attrs={
-            'class': 'form-control', 
-            'placeholder': ' ', 
-            'id': 'txtPassword', 
-            'required': True, 
-        }
-    ))
+        self.fields['username'].widget.attrs['class'] = 'form-control'
+        self.fields['password'].widget.attrs['class'] = 'form-control'
 
 class UserRegisterForm(forms.ModelForm):
     class Meta:
         model = UserModel 
-        fields = ('phone')
+        fields = ('user_phone', )
         labels = {
-            'phone': 'Telefone', 
+            'user_phone': 'Telefone', 
         }
 
         widgets = {

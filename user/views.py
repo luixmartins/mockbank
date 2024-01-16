@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect 
-from django.contrib.auth import authenticate
 from django.contrib import auth 
+from django.contrib.auth.decorators import login_required
 
 from user.forms import * 
 
@@ -9,25 +9,19 @@ def loginUser(request):
         redirect('userHome.html')
 
     if request.method == 'POST': 
-        form = UserLoginForm(request.POST)
+        form = UserLoginForm(request, request.POST)
 
         if form.is_valid():
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password')
+            user = form.get_user()
+            auth.login(request, user)
 
-            user = authenticate(username=username, password=password)
+            return redirect('user:home')
+        
+        context = {
+            'form': form, 
+        }   
 
-            if user is not None: 
-                auth.login(request, user)
-
-                return redirect('user:home')
-
-            context = {
-                'form': form, 
-                'error': 'Credenciais inválidas, tente novamente.', 
-            }
-            
-            return render(request, 'login.html', context)         
+        return render(request, 'login.html', context)         
 
     context = {
         'form': UserLoginForm()
@@ -35,5 +29,6 @@ def loginUser(request):
 
     return render(request, 'login.html', context)
 
+@login_required 
 def home(request):
-    return render(request, 'home.html')
+    return render(request, 'home.html', {'user': request.user})

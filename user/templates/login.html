@@ -13,6 +13,9 @@
 
                         <form action="" method="post">
                             {% csrf_token %}
+
+                            
+
                             <div class="col-12 form-floating" style="margin-top: 40px;">
                                 {{ form.username }}
                                 <label for="txtUser">
@@ -25,13 +28,12 @@
                                         Senha
                                     </label>
                                 </div>
-
-                                <div class="col-12">
-                                    {% if error %}
-                                        <p class="text-danger mt-2">{{error}}</p>
-                                    {% endif %}
-                                </div>
-
+                                {% if form.non_field_errors %}
+                                    <div class="col-12 text-danger mb-2"> 
+                                        {{form.non_field_errors}}
+                                    </div>
+                                {% endif %}
+                                
                                 <div class="col-12 mt-4 text-center mb-4">
                                     <button class="btn btn-lg btn-dark w-100" type="submit">
                                         Entrar

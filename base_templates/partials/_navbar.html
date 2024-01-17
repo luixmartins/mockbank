@@ -2,22 +2,35 @@
 
 <nav class="navbar navbar-expand-sm">
     <div class="container">
-        <a href={% url "home:home" %} class="navbar-brand d-flex align-items-center">
+        <a href={% if user.is_authenticated %}{% url "user:home" %}{% else %}{% url "home:home" %}{% endif %} 
+            class="navbar-brand d-flex align-items-center">
+            
             <img src={% static "img/mockbank_logo_minimal.png" %} alt="MockBank Logo" width="150px">
         </a>
+        
+        <div class="collapse navbar-collapse justify-content-end" id="menuNavbar">
+            <div class="navbar-nav float-end">
+                <a href={% url "home:contact_us" %} class="nav-link text-dark fs-5 d-none d-md-block">Entre em contato</a>
+                
+                {% if user.is_authenticated %}
+                <div class="vr mt-2 d-none d-sm-block" style="height: 30px;"></div>
+                <a href={% url "user:profile" %} class="nav-link text-dark fs-5">Meu Perfil</a>
+                <a href={% url "user:logout" %} class="nav-link text-dark fs-5">Sair</a>
+                {% else %}
+                    <a href={% url "user:create" %} class="nav-link text-dark fs-5">Criar conta</a>
+                    <div class="vr mt-2 d-none d-sm-block" style="height: 30px;"></div>
+                    <a href={% url "user:login" %} class="nav-link text-dark fs-5">Entrar</a>
+                {% endif %}
+                
+            </div>
+        </div>
+
         <a href={% url "home:contact_us" %} class="nav-link text-dark fs-5 d-md-none">Entre em contato</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuNavbar">
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="collapse navbar-collapse justify-content-end" id="menuNavbar">
-            <div class="navbar-nav float-end">
-                <a href={% url "home:contact_us" %} class="nav-link text-dark fs-5 d-none d-md-block">Entre em contato</a>
-                <a href={% url "user:login" %} class="nav-link text-dark fs-5">Entrar</a>
-                <div class="vr mt-2 d-none d-sm-block" style="height: 30px;"></div>
-                <a href="#" class="nav-link text-dark fs-5">Criar conta</a>
-            </div>
-        </div>
+        
 
     </div>
 </nav>

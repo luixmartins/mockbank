@@ -1,0 +1,55 @@
+{% extends "global/base.html" %}
+
+{% block content %}
+
+<main style="margin-top: 30px;">
+    <div class="container mb-5">
+        <h2 class="mb-3 text-center">Criar minha conta MockBank</h2>
+        <div class="row justify-content-center">
+            <form action="" class="col-sm-10 col-md-8 col-lg-6" method="POST">
+                {% csrf_token %}
+
+                {{ user_form.non_field_errors }}
+                {{ member_form.non_field_errors }}
+
+                
+                <p class="lead"> Dados de Usuário </p>
+                {% for field in member_form %}
+
+                <div class="mb-3">
+                    {{field.errors}}
+                </div>
+                
+                <div class="form-floating mb-4">
+                    {{field}}
+                    <label for={{field.id}}>
+                        {{field.label_tag}}
+                    </label>
+                    <div class="list-unstyled mt-2 ms-1 fs-6">
+                        {{field.help_text }}    
+                    </div>
+                    
+                    
+                </div>
+                {% endfor %}
+
+                <hr>
+                <p class="lead"> Dados de Contato </p>
+                {% for field in user_form %}
+                <div class="form-floating mb-3">
+                    {{field.errors}}
+                    {{field}}
+                    <label for={{field.id}}>
+                        {{field.label_tag}}
+                    </label>
+                </div>
+                {% endfor %}
+
+                <button class="btn btn-lg btn-dark" type="submit">
+                    Criar conta
+                </button>      
+            </form>
+        </div>
+    </div>
+</main>
+{% endblock content %}

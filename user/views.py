@@ -1,15 +1,15 @@
-from django.http import HttpResponse
+from typing import Any
 from django.shortcuts import render, redirect 
 from django.contrib import auth, messages
 from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from django.contrib.auth.models import User 
+from django.views.generic.base import TemplateView
 
 
 from user import forms 
 
 def loginUser(request):
-    if request.user.is_authenticated:
-        redirect('userHome.html')
-
     if request.method == 'POST': 
         form = forms.UserLoginForm(request, request.POST)
 
@@ -66,10 +66,19 @@ def createUser(request):
 
     return render(request, 'create.html', context)
 
-@login_required 
-def home(request):
-    return render(request, 'home.html', {'user': request.user})
+@method_decorator(login_required(login_url='user:login'), name='dispatch')
+class HomePageView(TemplateView):
+    template_name = 'home.html'
 
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+
+        user_logged = User.objects.get(username=self.request.user.username) 
+
+        context['user'] = user_logged 
+
+        return context  
+        
 @login_required
 def profileUser(request): 
     ...

@@ -1,8 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from home.forms import ContactForm
 # Create your views here.
 def home(request):
+    if request.user.is_authenticated: 
+        return redirect('user:home')
+    
     return render(request, 'homepage.html')
 
 def contact_us(request):

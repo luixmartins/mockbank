@@ -8,6 +8,7 @@ from django.views.generic.base import TemplateView
 
 
 from user import forms 
+from user.models import User as BaseUser 
 
 def loginUser(request):
     if request.method == 'POST': 
@@ -74,9 +75,18 @@ class HomePageView(TemplateView):
         context = super().get_context_data(**kwargs)
 
         user_logged = User.objects.get(username=self.request.user.username) 
+        account = BaseUser.objects.get(owner=user_logged.id)
 
-        context['user'] = user_logged 
+        context['user'] = user_logged   
 
+        data = {
+            'balance': account.account_balance, 
+            'limit': account.account_balance + account.account_limit, 
+            'used_limit': account.account_limit - (account.account_balance + account.account_limit), 
+        }
+
+        context['account'] = data
+    
         return context  
         
 @login_required

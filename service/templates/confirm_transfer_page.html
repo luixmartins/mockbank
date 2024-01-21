@@ -1,0 +1,21 @@
+{% extends "global/base.html" %}
+
+{% block content %}
+<main>
+    <div class="container">
+        <h2>Confirmação de Transferência</h2>
+    
+    <p>Valor da Transferência: R$ {{ form_data.value }}</p>
+    <p>Enviado por: {{ form_data.sent_user }}</p>
+    <p>Recebido por: {{ form_data.received_user }}</p>
+
+    <form method="post" action="{% url 'confirm_transfer' %}">
+        {% csrf_token %}
+        <button type="submit">Confirmar Transferência</button>
+    </form>
+
+    <a href="{% url 'transfer' %}">Cancelar</a>
+    </div>
+</main>
+
+{% endblock content %}

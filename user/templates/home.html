@@ -30,6 +30,14 @@
         </div>
     </div>
 
+    {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-success col-8 text-start" role="alert">
+            <p> {{ message }} </p>                    
+        </div>     
+        {% endfor %}
+    {% endif %}
+
     <section class="container mt-5 mb-5">
         <div class="col-12 col-md-10 col-lg-8 mx-auto">
             <div class="card">

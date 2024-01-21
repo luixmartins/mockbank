@@ -4,15 +4,17 @@ from django.contrib import auth, messages
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.contrib.auth.models import User 
-from django.views.generic.base import TemplateView
+from django.views.generic.base import TemplateView, View
+from django.views.generic import DetailView
 
 
 from user import forms 
 from user.models import User as BaseUser 
+from user.services import UserService
 
-def loginUser(request):
-    if request.method == 'POST': 
-        form = forms.UserLoginForm(request, request.POST)
+class LoginUser(View):
+    def post(self, request): 
+        form = forms.UserLoginForm(request, self.request.POST)
 
         if form.is_valid():
             user = form.get_user()
@@ -26,22 +28,32 @@ def loginUser(request):
 
         return render(request, 'login.html', context)         
 
-    context = {
-        'form': forms.UserLoginForm()
-    }
+    def get(self, request): 
+        context = {
+            'form': forms.UserLoginForm()
+        }
 
-    return render(request, 'login.html', context)
+        return render(request, 'login.html', context)
 
-@login_required
-def logoutUser(request):
-    auth.logout(request)
+@method_decorator(login_required(login_url='user:login'), name='dispatch')
+class LogoutUser(View):
+    def get(self, request):
+        auth.logout(request)
 
-    return redirect('home:home')
+        return redirect('home:home')
 
-def createUser(request):
-    if request.method == 'POST':
-        user_form = forms.UserRegisterForm(request.POST)
-        member_form = forms.MemberRegisterForm(request.POST)
+class CreateUser(View):
+    def get(self, request): 
+        context = {
+            'user_form': forms.UserRegisterForm(), 
+            'member_form': forms.MemberRegisterForm(), 
+        }
+
+        return render(request, 'create.html', context)
+    
+    def post(self, request): 
+        user_form = forms.UserRegisterForm(self.request.POST)
+        member_form = forms.MemberRegisterForm(self.request.POST)
 
         if user_form.is_valid() and member_form.is_valid():
             member = member_form.save()
@@ -60,12 +72,7 @@ def createUser(request):
 
         return render(request, 'create.html', context)
     
-    context = {
-        'user_form': forms.UserRegisterForm(), 
-        'member_form': forms.MemberRegisterForm(), 
-    }
-
-    return render(request, 'create.html', context)
+    
 
 @method_decorator(login_required(login_url='user:login'), name='dispatch')
 class HomePageView(TemplateView):
@@ -74,21 +81,22 @@ class HomePageView(TemplateView):
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
 
-        user_logged = User.objects.get(username=self.request.user.username) 
-        account = BaseUser.objects.get(owner=user_logged.id)
+        context['user'] = UserService.get_user_django(username=self.request.user.username)
+        context['account'] = UserService.user_balance(self.request.user.id)
 
-        context['user'] = user_logged   
-
-        data = {
-            'balance': account.account_balance, 
-            'limit': account.account_balance + account.account_limit, 
-            'used_limit': account.account_limit - (account.account_balance + account.account_limit), 
-        }
-
-        context['account'] = data
-    
         return context  
         
-@login_required
-def profileUser(request): 
-    ...
+@method_decorator(login_required(login_url='user:login'), name='dispatch')
+class ProfileUser(DetailView): 
+    model = User
+    template_name = 'profile_user.html'  
+    context_object_name = 'user'  
+    slug_field = 'username'
+    slug_url_kwarg = 'username'
+
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context =  super().get_context_data(**kwargs)
+
+        context['base_user'] = UserService.get_user_app(self.object.id)
+
+        return context 

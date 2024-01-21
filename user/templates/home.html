@@ -32,7 +32,7 @@
 
     {% if messages %}
         {% for message in messages %}
-        <div class="alert alert-success col-8 text-start" role="alert">
+        <div class="alert alert-success col-8 text-start mt-5 ms-2" role="alert">
             <p> {{ message }} </p>                    
         </div>     
         {% endfor %}
@@ -66,10 +66,13 @@
                             </a>
 
                             <div class="col-12 mt-5 d-flex justify-content-between p-3 rounded-3">
-                                <p class="d-inline-block my-auto">Limite da conta disponível</p>
+                                {% if account.limit == 0 %}
+                                <p class="d-inline-block my-auto">Você não possui limite especial no momento.</p>
+                                {% else %}
+                                <p class="d-inline-block my-auto">Limite especial da conta </p>
 
                                 <p class="d-inline-block my-auto ">R$ {{ account.limit }}</p>
-
+                                {% endif %}
                             </div>
                             {% if account.used_limit > 0 %}
                             <p class="mt-4">Você está utilizando <strong>R$ {{ account.used_limit }} </strong> do seu limite da
@@ -104,11 +107,11 @@
                 </div>
                 <div class="col-4">
 
-                    <a href="#"
+                    <a href={% url "service:transfer" %}
                         class="card justify-content-center text-center link-underline-opacity-0 link-underline-opacity-0-hover link-dark"
                         style="height: 100px;">
-                        <i class="bi bi-bank fs-5"></i>
-                        Outros serviços
+                        <i class="bi bi-arrow-bar-right fs-5"></i>
+                        Transferência
                     </a>
                 </div>
             </div>

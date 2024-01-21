@@ -6,12 +6,14 @@ from django.utils.decorators import method_decorator
 
 from . import forms 
 from .services import TransferService
+from user.services import UserService
 
 @method_decorator(login_required(login_url='user:login'), name='dispatch')
 class TransferPage(View):
     def get(self, request):
         context = {
-            'form': forms.TransferForm(from_user=request.user)
+            'form': forms.TransferForm(from_user=request.user), 
+            'account': UserService.user_balance(self.request.user.id), 
         }
 
         return render(request, 'transfer_page.html', context)
@@ -36,4 +38,8 @@ class TransferPage(View):
             
             return redirect('user:home')
         
-        return render(request, 'transfer_page.html', {'form': forms.TransferForm(request.POST, from_user=request.user)})
+        context = {
+            'form': forms.TransferForm(request.POST, from_user=request.user), 
+            'account': UserService.user_balance(self.request.user.id), 
+        }
+        return render(request, 'transfer_page.html', context)

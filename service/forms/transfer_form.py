@@ -5,7 +5,7 @@ from user.models import User as BaseUser
 from service.models import TransferModel
 
 class TransferForm(forms.ModelForm):
-    received_by_username = forms.CharField(max_length=150, label='Nome de Usuário', widget=forms.TextInput(attrs={'class': 'form-control'}))
+    received_by_username = forms.CharField(max_length=150, label='Nome de Usuário', widget=forms.TextInput(attrs={'class': 'form-control', 'id': 'txtUser'}))
 
     def __init__(self, *args, **kwargs):
         from_user = kwargs.pop('from_user', None)
@@ -13,7 +13,12 @@ class TransferForm(forms.ModelForm):
         super(TransferForm, self).__init__(*args, **kwargs)
 
         self.from_user = from_user 
-        self.fields['value'].widget.attrs.update({'class': 'form-control'})
+        self.fields['value'].widget.attrs.update({
+                'class': 'form-control', 
+                'id': 'txtValue', 
+                'min': '0.01', 
+                'value': '0.01', 
+            })
 
     class Meta:
         model = TransferModel

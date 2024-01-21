@@ -14,9 +14,14 @@ class UserService:
     def user_balance(pk: int):
         user = UserService.get_user_app(pk)
         
+        if user.account_balance >= 0:
+            limit = user.account_limit
+        else: 
+            limit = user.account_balance + user.account_limit
+            
         return {
             'balance': user.account_balance, 
-            'limit': user.account_balance + user.account_limit, 
+            'limit': limit, 
             'used_limit': user.account_limit - (user.account_balance + user.account_limit), 
         }
 

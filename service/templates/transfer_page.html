@@ -1,20 +1,103 @@
 {% extends "global/base.html" %}
 
+
+{% load static %}
+{% load humanize %}
+
 {% block content %}
 
 <main>
-    <div class="container">
-        <form action="" method="post">
-            {% csrf_token %}
-            {{form.non_field_errors}}
+    <div class="container-fluid bg-dark">
+        <div class="container">
+            <div class="navbar text-white align-items-center justify-content-between ">
 
-            {{form.as_p}}
-        
-            <button class="btn btn-dark ms-2" type="submit">
-                Realizar Transação
-            </button>
-        </form>
+                <div class="col-6 d-flex">
+                    <a href="#" class="navbar-brand">
+                        <i class="bi bi-person-circle text-white fs-2"></i>
+                        <h2 class="mt-2 text-white d-inline ms-1">Luiz</h2>
+                    </a>
+
+
+                </div>
+
+                <div class="col-6 d-flex justify-content-end align-items-center">
+                    <a href="#" class="navbar-brand">
+                        <i class="bi bi-search text-white fs-3"></i>
+                    </a>
+                    <a href="#" class="navbar-brand ms-2">
+                        <i class="bi bi-chat-left-text-fill text-white fs-3"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <section class="container mt-5">
+        <div class="col-12 col-md-10 col-lg-8 mx-auto">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-2">
+                            <img src={% static "img/mockbank_logo_minimal.png" %}  width="100px" alt="" class="">
+                        </div>
+                    </div>
+
+                    <div class="row mt-5">
+                        <div class="col-12 justify-content-between d-flex">
+                            <p class="lead">Realizar transferência</p>
+                        </div>
+                        <hr class="my-2">
+                        <div class=" col-12">
+                            <div class="col-12 mt-1 d-flex justify-content-between p-2 rounded-3">
+
+                                <p class="d-inline-block my-auto">Saldo disponível</p>
+                                
+                                {% if account.balance < 0 %}
+                                <p class="d-inline-block my-auto text-danger">R$ {{account.balance}}</p>
+                                {% else %}
+                                <p class="d-inline-block my-auto ">R$ {{account.balance}}</p>
+                                {% endif %}
+                                
+
+                            </div>
+                            <div class="col-12 d-flex justify-content-between p-2 rounded-3">
+
+                                <p class="d-inline-block my-auto">Limite da conta disponível</p>
+                                <p class="d-inline-block my-auto ">R$ {{account.limit}}</p>
+                            </div>
+                            <hr class="my-4">
+                            <div class="col-12 ">
+                                <form action="" class="form-inline" method="post">
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        <label class="ms-1" for="exampleInputAmount">Valor (R$)</label>
+                                        <div class="input-group">
+                                            {{ form.value }}
+                                            
+                                        </div>
+                                        {{ form.value.errors }}
+                                    </div>
+                                    <div class="form-group mt-3">
+                                        <label for="txtUser" class="ms-1">Enviar para (nome de usuário
+                                            MockBank)</label>
+                                        {{ form.received_by_username }}
+                                        {{ form.received_by_username.errors }}
+                                    </div>
+
+                                    <div class="form-group mt-4 mb-2">
+                                        <button class="btn btn-lg btn-dark w-100" type="submit">Realizar
+                                            operação</button>
+                                    </div>
+                                </form>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 </main>
 
 

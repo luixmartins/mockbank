@@ -1,0 +1,14 @@
+{% if user.is_authenticated %}
+
+{% else %}
+<footer class="container-fluid bg-light p-4  mt-auto">
+    <div class="row">
+        <div class="col-12 col-md-4 text-center">
+            <a href="#" class="link nav-link">Sobre o MockBank </a>
+        </div>
+        <div class="col-12 col-md-4 text-center">
+            Todos os direitos reservados pelo desenvolvedor &copy;
+        </div>
+    </div>
+</footer>
+{% endif %}

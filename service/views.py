@@ -43,3 +43,16 @@ class TransferPage(View):
             'account': UserService.user_balance(self.request.user.id), 
         }
         return render(request, 'transfer_page.html', context)
+    
+class NotLoggedLoan(View): 
+    def get(self, request): 
+        form = forms.LoanSimulateForm()
+
+        context = {
+            'form': form 
+        }
+
+        return render(request, 'not_logged_loan.html', context)
+    
+    def post(self, request): 
+        ... 

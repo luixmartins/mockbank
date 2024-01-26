@@ -1,0 +1,95 @@
+{% extends "global/base.html" %}
+
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+<main>
+    <div class="container mt-4 mb-4 mt-md-5">
+        <div class="row">
+            <div class="col-12 mb-3">
+                <h3>Preencha alguns dados e vamos simular seu empréstimo!</h3>
+            </div>
+            <hr>
+        </div>
+        <div class="row justify-content-center">
+            <form action="" method="post">
+                <div class="col-12 col-md-10 col-lg-8  mx-auto mt-3" >
+                    <div class="form-floating mb-3 col-10 mx-auto">
+                        {{ form.name }}
+                        <label for="nomeInput">Nome</label>
+                    </div>
+                    <div class="form-floating mb-3 col-10 mx-auto">
+                        {{ form.dependents }}
+                        <label for="dependentesInput">Dependentes</label>
+                    </div>
+                    
+                    <div class="row justify-content-center ">
+                        <div class="form-floating col-5">
+                            
+                            {{ form.education }}
+
+                            <label class="ms-2" for="educacaoInput">Escolaridade</label>
+                        </div>
+                        <div class="form-floating col-5">
+                            {{ form.employed }}
+
+                            <label class="ms-2" for="empregoInput">Situação empregatícia</label>
+                        </div>
+                    </div>
+                    <hr class="my-4">
+                    <div class="row mt-3 justify-content-center">
+                        <div class="form-floating col-5 mb-3">
+                            {{ form.annual_income }}
+                            <label class="ms-3" for="rendaInput">Renda anual (R$)</label>
+                        </div>
+                        <div class="form-floating mb-3 col-5">
+                            {{ form.score }}
+                            <label class="ms-3" for="scoreInput">Score (pts)</label>
+                        </div>
+                    </div>
+
+                    <div class="row  justify-content-center">
+                        <div class="form-floating col-5 mb-3">
+                            {{ form.residential_assets }}
+                            <label class="ms-3" for="residencialInput">Patrimônio residencial</label>
+                        </div>
+                        
+                        <div class="form-floating col-5 mb-3">
+                            {{ form.commercial_assets }}
+
+                            <label class="ms-3" for="comercialInput">Patrimônio comercial</label>
+                        </div>
+                        <div class="form-floating col-5 ">
+                            {{ form.luxury_assets }}
+                            <label class="ms-3" for="luxoInput">Patrimônio luxo</label>
+                        </div>
+                        <div class="form-floating col-5 ">
+                            {{ form.bank_assets }}
+                            <label class="ms-3" for="bancarioInput">Patrimônio bancário</label>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <div class="row justify-content-center">
+                        <div class="form-floating col-5 mb-3">
+                            {{ form.value }}
+                            <label class="ms-3" for="valorInput">Valor do empréstimo</label>
+                        </div>
+                        <div class="form-floating col-5 mb-3">
+                            {{ form.payment }}
+                            <label class="ms-3" for="mesesInput">Número de parcelas</label>
+                        </div>
+                    </div>
+
+                    <div class="col-10" style="margin: 0 auto;">
+                        <button class="btn btn-dark btn-lg d-block mt-2 w-100" type="submit">Simular Empréstimo</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</main>
+{% endblock content %}

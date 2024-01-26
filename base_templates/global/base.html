@@ -3,12 +3,14 @@
 
 {% include "partials/_head.html" %}
 
-<body>
+<body class="d-flex flex-column min-vh-100">
     {% include "partials/_navbar.html" %}
     
     {% block content %}
     {% endblock content %}
 
     {% include "partials/_scripts.html" %}
+
+    {% include "partials/_footer.html" %}
 </body>
 </html>

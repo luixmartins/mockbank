@@ -47,7 +47,7 @@ class LoanSimulateForm(forms.Form):
             'id': 'scoreInput', 
         })
         self.fields['value'].widget.attrs.update({
-            'class': 'form-control', 
+            'class': 'form-control monetary-mask', 
             'id': 'valorInput', 
         })
         self.fields['payment'].widget.attrs.update({
@@ -55,22 +55,22 @@ class LoanSimulateForm(forms.Form):
             'id': 'mesesInput', 
         })
         self.fields['annual_income'].widget.attrs.update({
-            'class': 'form-control', 
+            'class': 'form-control monetary-mask', 
             'id': 'rendaInput', 
         })
         self.fields['residential_assets'].widget.attrs.update({
-            'class': 'form-control', 
+            'class': 'form-control monetary-mask', 
             'id': 'residencialInput', 
         })
         self.fields['commercial_assets'].widget.attrs.update({
-            'class': 'form-control', 
+            'class': 'form-control monetary-mask', 
             'id': 'comercialInput', 
         })
         self.fields['luxury_assets'].widget.attrs.update({
-            'class': 'form-control', 
+            'class': 'form-control monetary-mask', 
             'id': 'luxoInput', 
         })
         self.fields['bank_assets'].widget.attrs.update({
-            'class': 'form-control', 
+            'class': 'form-control monetary-mask', 
             'id': 'bancarioInput', 
         })

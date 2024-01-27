@@ -55,4 +55,14 @@ class NotLoggedLoan(View):
         return render(request, 'not_logged_loan.html', context)
     
     def post(self, request): 
-        ... 
+        form = forms.LoanSimulateForm(request.POST)
+
+        if form.is_valid(): 
+            print("O formulário é valido")
+
+            return redirect('home:home')
+        context = {
+            "form": form, 
+        }
+
+        return render(request, 'not_logged_loan.html', context)

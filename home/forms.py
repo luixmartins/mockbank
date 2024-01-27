@@ -1,13 +1,27 @@
+from collections.abc import Mapping
+from typing import Any
 from django import forms 
 from django.core.exceptions import ValidationError
 
-import re 
+import re
+
+from django.core.files.base import File
+from django.db.models.base import Model
+from django.forms.utils import ErrorList 
 
 from home.models import ContactHome
 
 EMAIL_REGEX = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
 
 class ContactForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs) -> None:
+        super(ContactForm, self).__init__(*args, **kwargs)
+
+        self.fields['name'].label_suffix = ""
+        self.fields['email'].label_suffix = ""
+        self.fields['message'].label_suffix = ""
+
     class Meta:
         model = ContactHome 
         fields =  ("name", "email", "message")
@@ -27,7 +41,6 @@ class ContactForm(forms.ModelForm):
                 'class': 'form-control',
                 'id': 'txtEmail', 
                 'placeholder': " ", 
-                'autofocus': True, 
             }
             ), 
             'message': forms.Textarea(attrs={

@@ -1,11 +1,16 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
 from user.models import User as BaseUser
 from service.models import TransferModel
 
 class TransferForm(forms.ModelForm):
     received_by_username = forms.CharField(max_length=150, label='Nome de Usuário', widget=forms.TextInput(attrs={'class': 'form-control', 'id': 'txtUser'}))
+    password = forms.CharField(label='Senha', widget=forms.PasswordInput(attrs={
+        'class': 'form-control', 
+        'id': 'txtPassword', 
+    }))
 
     def __init__(self, *args, **kwargs):
         from_user = kwargs.pop('from_user', None)
@@ -48,6 +53,17 @@ class TransferForm(forms.ModelForm):
             raise ValidationError('Insira um contato válido.')
 
         return user
+    
+    def clean_password(self): 
+        password = self.cleaned_data['password']
+ 
+        auth = authenticate(username=self.from_user.username, password=password)
+        
+        if auth: 
+            return password
+
+        raise ValidationError("Senha incorreta, tente novamente.") 
+        
 
     def save(self, commit=True):
         transfer_instance = super().save(commit=False)

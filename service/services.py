@@ -37,9 +37,11 @@ class SimulateLoanService:
                 response = await client.post(url=url, json=data)
 
                 if response.status_code == 200: 
-                    return response.json()
+                    response = response.json()
+                    
+                    return response['response']
                 
-                return response.status_code
+                return None
         
         except (httpx.HTTPError, httpx.RequestError) as error: 
             return f'Erro de solicitação: {error}'

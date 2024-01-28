@@ -50,16 +50,12 @@ async def NotLoggedLoan(request):
         form = forms.LoanSimulateForm(request.POST)
 
         if form.is_valid(): 
-            response = await SimulateLoanService.simulate_loan_api(request)
+            context = {
+                'response': await SimulateLoanService.simulate_loan_api(request), 
+                'name': request.POST.get('name'), 
+            }
 
-            if response['response'] == True: 
-                messages.success(request, "Seu empréstimo pode ser aprovado!")
-            elif response['response'] == False: 
-                messages.success(request, "Seu empréstimo não pode ser aprovado no momento!")
-            else: 
-                messages.success(request, "Não foi possível realizar a operação no momento.")
-
-            return redirect('user:home')
+            return render(request, 'response_loan.html', context)
         
         context = {
             'form': form 

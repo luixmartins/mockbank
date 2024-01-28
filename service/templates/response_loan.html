@@ -1,0 +1,71 @@
+{% extends "global/base.html" %}
+
+{% block content %}
+
+{% if response == True %}
+    <main>
+        <div class="container mt-4 mb-4 mt-md-5">
+            <div class="row">
+                <div class="col-12 mb-3">
+                    <h3>Ótima notícia Sr(a) <strong>{{ name }}</strong>, seu empréstimo pode ser aprovado no MockBank!</h3>
+                </div>
+                <hr>
+
+                <div class="col-12 col-md-8 mt-3">
+                    <p>Caro Sr(a) <strong>{{ name }}</strong>,</p>
+                    <p>Ficamos felizes em informar que o seu empréstimo pode ser aprovado imediatamente no MockBank.</p>
+
+                    <p>Então... Vamos criar uma conta MockBank?</p>
+                    <p>É rápido, simples e seguro!</p>
+
+                    <a href={% url "user:create" %} class="btn btn-dark mt-3">Criar minha conta Mockbank</a>
+                </div>
+            </div>
+        </div>
+    </main>
+{% else %}
+    {% if response == False %}
+    <main>
+        <div class="container mt-4 mb-4 mt-md-5">
+            <div class="row">
+                <div class="col-12 mb-3">
+                    <h3>Sr(a) <strong>{{ name }}</strong>, infelizmente seu empréstimo não pode ser aprovado no MockBank neste
+                        momento.</h3>
+                </div>
+                <hr>
+
+                <div class="col-12 col-md-8 mt-3">
+                    <p>Caro Sr(a) <strong>{{ name }}</strong>,</p>
+                    <p>Neste momento, não podemos aprovar sua solicitação de empréstimo.</p>
+
+                    <p>
+                        No entanto, sua solicitação pode ser reavaliada conforme movimentação e uso da conta MockBank.
+                    </p>
+
+                    <p>Então... Vamos criar uma conta MockBank?</p>
+                    <p>É rápido, simples e seguro!</p>
+
+                    <a href={% url "user:create" %} class="btn btn-dark mt-3">Criar minha conta Mockbank</a>
+                </div>
+            </div>
+    </main>
+    {% else %}
+        <main>
+            <div class="container mt-4 mb-4 mt-md-5">
+                <div class="row">
+                    <div class="col-12 mb-3">
+                        <h3>Infelizmente não foi possível atender sua solicitação neste momento.</h3>
+                    </div>
+                    <hr>
+        
+                    <div class="col-12 col-md-8 mt-3">
+                        <p>Estamos trabalhando para corrigir este problema, tente novamente mais tarde.</p>
+                        <p>Central de Relacionamento MockBank.</p>
+        
+                    </div>
+                </div>
+            </div>
+        </main>
+    {% endif %}
+{% endif %}
+{% endblock content %}

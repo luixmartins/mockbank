@@ -27,6 +27,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['pretty-large-kingfish.ngrok-free.app', '127.0.0.1']
 
+CSRF_TRUSTED_ORIGINS = ['https://pretty-large-kingfish.ngrok-free.app', 'http://127.0.0.1']
+
+SECURE_SSL_REDIRECT = False
 
 # Application definition
 

@@ -18,20 +18,28 @@ class TransferService:
 class SimulateLoanService: 
     @staticmethod
     async def simulate_loan_api(request):
-        url = 'http://127.0.0.1:8080/predict'
-        data = []
-        
-        for input in request.POST: 
-            try: 
-                data.append(float(request.POST.get(input)))
-            except: 
-                pass 
+        url = 'http://127.0.0.1:3000/predict'
+        data = {
+            'dependentes': int(request.POST.get('dependents')), 
+            'educacao': int(request.POST.get('education')), 
+            'empregado': int(request.POST.get('employed')), 
+            'renda_anual': float(request.POST.get('annual_income')), 
+            'valor': float(request.POST.get('value')), 
+            'pagamento': int(request.POST.get('payment')), 
+            'score': int(request.POST.get('score')), 
+            'patrimonio_residencial': float(request.POST.get('residential_assets')), 
+            'patrimonio_comercial': float(request.POST.get('commercial_assets')), 
+            'patrimonio_luxo': float(request.POST.get('luxury_assets')), 
+            'patrimonio_bancario': float(request.POST.get('bank_assets')), 
+        }
         try: 
             async with httpx.AsyncClient() as client: 
-                response = await client.post(url=url, json={'params': data})
+                response = await client.post(url=url, json=data)
 
                 if response.status_code == 200: 
                     return response.json()
+                
+                return response.status_code
         
         except (httpx.HTTPError, httpx.RequestError) as error: 
             return f'Erro de solicitação: {error}'

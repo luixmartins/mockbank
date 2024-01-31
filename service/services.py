@@ -1,4 +1,7 @@
+from django.db.models import Q 
+
 from user.models import User 
+from service.models import TransferModel 
 
 import httpx 
 
@@ -14,7 +17,14 @@ class TransferService:
         sent_user.save()
         received_user.save() 
 
-
+class ExtractService: 
+    @staticmethod
+    def extract_account(filter_type, user_id): 
+        if filter_type == "all": 
+            return TransferModel.objects.filter(Q(sent_by=user_id) | Q(received_by=user_id))
+        
+        return None 
+            
 class SimulateLoanService: 
     @staticmethod
     async def simulate_loan_api(request):

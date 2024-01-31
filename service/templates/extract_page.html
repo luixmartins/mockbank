@@ -1,0 +1,21 @@
+{% extends "global/base.html" %}
+
+{% block content %}
+
+<form method="get" action="" id="extract-form">
+    {% csrf_token %}
+    {{ form.filter_type }}
+</form>
+
+<ul>
+    {% for extrato in response %}
+        <li>{{ extrato.sent_by }} - {{ extrato.created_at }} - {{ extrato.value }}</li>
+    {% endfor %}
+</ul>
+
+<script>
+    document.getElementById('id_filter_type').addEventListener('change', function() {
+        document.getElementById('extract-form').submit();
+    });
+</script>
+{% endblock content %}

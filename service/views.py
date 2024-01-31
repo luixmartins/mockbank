@@ -6,7 +6,7 @@ from django.utils.decorators import method_decorator
 from asgiref.sync import sync_to_async
 
 from . import forms 
-from .services import TransferService, SimulateLoanService
+from .services import TransferService, SimulateLoanService, ExtractService
 from user.services import UserService
 
 @method_decorator(login_required(login_url='user:login'), name='dispatch')
@@ -45,6 +45,25 @@ class TransferPage(View):
         }
         return render(request, 'transfer_page.html', context)
 
+@method_decorator(login_required(login_url='user:login'), name='dispatch')
+class ExtractAccountView(View): 
+    template_name = 'extract_page.html' 
+    form_class = forms.ExtractForm
+    
+    def get(self, request, *args, **kwargs):
+        form = self.form_class(request.GET)
+
+        filter_type = form['filter_type'].value() if form.is_valid() else 'all' 
+        context = {
+            'response': ExtractService.extract_account(filter_type=filter_type, user_id=request.user.id), 
+            'form': form 
+        }
+
+        return render(request, self.template_name, context)
+    
+    def post(self, request): 
+        ... 
+
 async def NotLoggedLoan(request): 
     if request.method == 'POST': 
         form = forms.LoanSimulateForm(request.POST)
@@ -67,4 +86,6 @@ async def NotLoggedLoan(request):
     }
 
     return render(request, 'not_logged_loan.html', context)
+
+
 

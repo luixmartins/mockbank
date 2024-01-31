@@ -13,7 +13,7 @@ class TransferModel(models.Model):
     received_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='received_transfers')
 
     def __str__(self) -> str:
-        return self.transfer_id
+        return str(self.transfer_id)
     
     class Meta: 
         ordering = ['-created_at']

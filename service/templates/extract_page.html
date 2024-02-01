@@ -3,7 +3,7 @@
 
 {% block content %}
 <main>
-    <div class="container mt-5">
+    <div class="container mt-5 mb-5">
         <div class="col-12 col-lg-10 mx-auto">
             <div class="card">
                 <div class="card-body">
@@ -19,8 +19,8 @@
 
                     <div class="col-12">
                         <div class="row mx-auto mt-3">
-                            {% if response %}
-                            {% for item in response %}
+                            {% if page_obj %}
+                            {% for item in page_obj %}
                                 <a href="#" class="mb-2" style="text-decoration: none;">
                                     <div class="container border rounded border-dark text-dark">
                                         <div class="row">
@@ -52,16 +52,46 @@
                             {% endif %}
                         </div>
                     </div>
+                    
+                    <div class="col-12 text-center mt-3">
+                        <nav>
+                            <ul class="pagination justify-content-center">
+                                {% if page_obj.has_previous %}
+                                <li class="page-item ">  
+                                    <a class="page-link" href="?page=1{% if form.filter_type.value %}&filter_type={{ form.filter_type.value }}{% endif %}">Anterior</a>
+                                </li>
+                                {% else %}
+                                <li class="page-item disabled">  
+                                    <a href="#" class="page-link">Anterior</a>
+                                </li>
+                                {% endif %}
+                                
+                                 <span class="mt-2 mx-3">
+                                    Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+                                 </span>   
+                                
+                                    
+                                {% if page_obj.has_next %}
+                                <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if form.filter_type.value %}&filter_type={{ form.filter_type.value }}{% endif %}">Próxima</a>
+                                
+                                {% else %}
+                                <a class="page-link disabled" href="#">Próxima</a>
+                                {% endif %}
+                            </ul>
+                          </nav>
+                    </div>
                 </div>
             </div>
-        </div>
         </div>
     </div>
 </main>
 
 <script>
-    document.getElementById('id_filter_type').addEventListener('change', function() {
-        document.getElementById('extract-form').submit();
-    });
+document.getElementById('id_filter_type').addEventListener('change', function() {
+    var filterValue = this.value;
+    var form = document.getElementById('extract-form');
+    form.action = '?' + 'filter_type=' + filterValue;
+    form.submit();
+});
 </script>
 {% endblock content %}

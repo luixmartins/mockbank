@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.views.generic.base import View
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from asgiref.sync import sync_to_async
+from django.core.paginator import Paginator
 
 from . import forms 
 from .services import TransferService, SimulateLoanService, ExtractService
@@ -54,16 +54,20 @@ class ExtractAccountView(View):
         form = self.form_class(request.GET)
 
         filter_type = form['filter_type'].value() if form.is_valid() else 'all' 
+
+        queryset = ExtractService.extract_account(filter_type=filter_type, user_id=request.user.id)
+        paginator = Paginator(queryset, 8)
+        page_number = request.GET.get("page")
+
+        page_obj = paginator.get_page(page_number)
+        
         context = {
-            'response': ExtractService.extract_account(filter_type=filter_type, user_id=request.user.id), 
-            'form': form 
+            'form': form, 
+            'page_obj': page_obj, 
         }
 
         return render(request, self.template_name, context)
     
-    def post(self, request): 
-        ... 
-
 async def NotLoggedLoan(request): 
     if request.method == 'POST': 
         form = forms.LoanSimulateForm(request.POST)

@@ -1,17 +1,63 @@
 {% extends "global/base.html" %}
+{% load humanize %}
 
 {% block content %}
+<main>
+    <div class="container mt-5">
+        <div class="col-12 col-lg-10 mx-auto">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="mt-2">Extrato da conta</h3>
+                    <hr class="mb-4">
+                    
+                    
+                    <form method="get" action="" id="extract-form">
+                        <p class="lead">Filtrar</p>
+                        {% csrf_token %}
+                        {{ form.filter_type }}
+                    </form>
 
-<form method="get" action="" id="extract-form">
-    {% csrf_token %}
-    {{ form.filter_type }}
-</form>
+                    <div class="col-12">
+                        <div class="row mx-auto mt-3">
+                            {% if response %}
+                            {% for item in response %}
+                                <a href="#" class="mb-2" style="text-decoration: none;">
+                                    <div class="container border rounded border-dark text-dark">
+                                        <div class="row">
+                                            <div class="col-8 col-sm-9 mt-1 ">
+                                                <p class="opacity-75">{{ item.transfer_id }}</p>
 
-<ul>
-    {% for extrato in response %}
-        <li>{{ extrato.sent_by }} - {{ extrato.created_at }} - {{ extrato.value }}</li>
-    {% endfor %}
-</ul>
+                                                {% if item.received_by == user %}
+                                                <p>Entrada - <strong>{{ item.sent_by }}</strong> {{ item.created_at|date:"d/m/Y" }}</p>
+                                                {% else %}
+                                                <p>Saída - transferência para <strong>{{ item.received_by }}</strong> em {{ item.created_at|date:"d/m/Y" }}</p>
+                                                {% endif %}
+                                            </div>
+                                            <div class="col-4 col-sm-3 text-end my-auto">
+                                                {% if item.received_by == user %}
+                                                <p class="text-success my-auto lead"> R$ {{item.value}} </p> 
+                                                {% else %}
+                                                <p class="text-danger my-auto lead"> R$ {{item.value}} </p> 
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            
+                            {% endfor %}
+                            {% else %}
+                            <p class="lead">
+                                Você não possui histórico de transações.
+                            </p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+</main>
 
 <script>
     document.getElementById('id_filter_type').addEventListener('change', function() {

@@ -20,10 +20,12 @@ class TransferService:
 class ExtractService: 
     @staticmethod
     def extract_account(filter_type, user_id): 
-        if filter_type == "all": 
+        if filter_type == "sent": 
+            return TransferModel.objects.filter(sent_by=user_id)
+        elif filter_type == "received": 
+            return TransferModel.objects.filter(received_by=user_id)
+        else: 
             return TransferModel.objects.filter(Q(sent_by=user_id) | Q(received_by=user_id))
-        
-        return None 
             
 class SimulateLoanService: 
     @staticmethod

@@ -26,6 +26,7 @@ class LoanSimulateForm(forms.Form):
     payment = forms.DecimalField(decimal_places=0, min_value=8, max_value=72, required=True)
     
     annual_income = forms.DecimalField(decimal_places=2, min_value=0, required=True)
+    
     residential_assets = forms.DecimalField(decimal_places=2, min_value=0, required=True)
     commercial_assets = forms.DecimalField(decimal_places=2, min_value=0, required=True)
     luxury_assets = forms.DecimalField(decimal_places=2, min_value=0, required=True)
@@ -58,6 +59,8 @@ class LoanSimulateForm(forms.Form):
             'class': 'form-control monetary-mask', 
             'id': 'rendaInput', 
         })
+
+
         self.fields['residential_assets'].widget.attrs.update({
             'class': 'form-control monetary-mask', 
             'id': 'residencialInput', 

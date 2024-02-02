@@ -15,7 +15,7 @@
         <div class="row justify-content-center">
             <form action="" method="post">
                 {% csrf_token %}
-                <div class="col-12 col-md-10 col-lg-8  mx-auto mt-3" >
+                <div class="col-12 col-md-10 col-lg-8  mx-auto mt-3">
                     <div class="form-floating mb-3 col-12 col-md-10 mx-auto">
                         {{ form.name }}
                         <label for="nomeInput">Nome</label>
@@ -24,10 +24,10 @@
                         {{ form.dependents }}
                         <label for="dependentesInput">Dependentes</label>
                     </div>
-                    
+
                     <div class="row justify-content-center ">
                         <div class="form-floating col-12 col-md-5 mb-3">
-                            
+
                             {{ form.education }}
 
                             <label class="ms-2" for="educacaoInput">Escolaridade</label>
@@ -55,7 +55,7 @@
                             {{ form.residential_assets }}
                             <label class="ms-3" for="residencialInput">Patrimônio residencial</label>
                         </div>
-                        
+
                         <div class="form-floating col-12 col-md-5 mb-3">
                             {{ form.commercial_assets }}
 
@@ -93,4 +93,7 @@
         </div>
     </div>
 </main>
+
+
+
 {% endblock content %}

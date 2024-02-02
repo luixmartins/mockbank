@@ -4,9 +4,42 @@
 {% block content %}
 
 <main>
-    <h1>{{user.username}}</h1>
-    <h1>{{base_user.user_phone}}</h1>
-    <h1>{{base_user.user_id}}</h1>
+    <div class="container">
+        <div class="row mt-5">
+            <div class="col-12">
+                <h2>Meus Dados</h2>
+                <hr>
+            </div>
+            <div class="col-10 mx-auto">
+                <h4>ID MockBank</h4>
+                <p class="lead ms-2 opacity-75"> {{ base_user.user_id }}</p>
+
+                <h4>Usuário</h4>
+                <p class="lead ms-2 opacity-75"> {{ user.username }}</p>
+
+                <h4>Email</h4>
+                <p class="lead ms-2 opacity-75"> {{ user.email }}</p>
+
+            </div>
+            <div class="col-10 mx-auto">
+                <hr>
+                <div class="col-5 float-start">
+                    <h4>Nome</h4>
+                    <p class="lead ms-2 opacity-75"> {{ user.first_name }} {{ user.last_name }}</p>
+                </div>
+                <div class="col-5 float-end">
+                    <h4>Telefone</h4>
+                    <p class="lead ms-2 opacity-75"> {{base_user.user_phone }} </p>
+                </div>
+            </div>
+            <div class="col-12">
+                <hr>
+                <p class="fs-5">Olá Sr(a) <strong>{{ user.first_name }}</strong>, caso necessite atualizar seus Dados Pessoais, entre em contato com nossa central de atendimento.</p>
+                <p class="fs-5">Atenciosamente, Central de Relacionamento MockBank.</p>
+            </div>
+        </div>
+    </div>
+
 </main>
 
 {% endblock content %}

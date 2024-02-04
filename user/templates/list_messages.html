@@ -6,23 +6,34 @@
     <div class="container mt-5">
         <div class="row">
             <div class="col-12 col-lg-2 text-end mt-3 mb-3 mb-lg-0">
-                <a href="#" class="btn btn-dark">
+                <a href={% url "user:create_message" %} class="btn btn-dark" style="width: 190px;">
                     Nova Mensagem
+                </a>
+                <a href={% url "user:home" %} class="btn btn-dark mt-2" style="width: 190px;">
+                    Página Inicial
                 </a>
             </div>
             <div class="col-12 col-lg-10 border-start">
-                <div class="col-12 mt-2 mb-2">
+                <div class="col-12 mt-2 mb-3">
                     {% if messages %}
                     {% for content in messages %}
-                    <a href="" class="border rounded d-block p-2 link-underline-opacity-0 link-underline">
+                    <a href={% url "user:detail_message" message_id=content.message_id %} class="border rounded d-block p-2 link-underline-opacity-0 link-underline mb-3">
                         <div class="row">
                             <div class="col-10">
-                                <p class="text-dark">{{ content.created_at }}</p>
+                                
+                                <p class="text-dark">
+                                    {% if content.message_from == user %}
+                                    <strong>Enviada em</strong> 
+                                    {% else %}
+                                    <strong>Recebida em</strong> 
+                                    {% endif %}    
+                                    {{ content.created_at }}
+                                </p>
                                 <p class="lead text-dark"> {{ content.subject }} </p>
                             </div>
                             <div class="col-lg-2 border-start  d-flex justify-content-center align-items-center">
-                                {% if content.message_read %}
-                                <i class="bi bi-envelope-open fs-1"></i>
+                                {% if content.message_read or content.message_from == user %}
+                                <i class="bi bi-envelope-open text-dark fs-1"></i>
                                 {% else %}
                                 <i class="bi bi-envelope text-dark  fs-1"></i>
                                 {% endif %}

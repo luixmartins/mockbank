@@ -59,8 +59,6 @@ class LoanSimulateForm(forms.Form):
             'class': 'form-control monetary-mask', 
             'id': 'rendaInput', 
         })
-
-
         self.fields['residential_assets'].widget.attrs.update({
             'class': 'form-control monetary-mask', 
             'id': 'residencialInput', 

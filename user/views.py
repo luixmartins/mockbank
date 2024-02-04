@@ -5,11 +5,11 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.contrib.auth.models import User 
 from django.views.generic.base import TemplateView, View
-from django.views.generic import DetailView
+from django.views.generic import DetailView, ListView
 
 
 from user import forms 
-from user.models import User as BaseUser 
+from user.models import User as BaseUser, UserMessages
 from user.services import UserService
 
 class LoginUser(View):
@@ -98,5 +98,18 @@ class ProfileUser(DetailView):
         context =  super().get_context_data(**kwargs)
 
         context['base_user'] = UserService.get_user_app(self.object.id)
+
+        return context 
+
+@method_decorator(login_required(login_url='user:login'), name='dispatch')
+class ListMessageUser(ListView): 
+    model = UserMessages 
+    template_name = 'list_messages.html'
+    context_object_name = 'messages'
+
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+
+        context['messages'] = UserMessages.objects.filter(message_from = self.request.user)
 
         return context 

@@ -1,0 +1,47 @@
+{% extends "global/base.html" %}
+
+{% block content %}
+
+<main>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-12 col-lg-2 text-end mt-3 mb-3 mb-lg-0">
+                <a href="#" class="btn btn-dark">
+                    Nova Mensagem
+                </a>
+            </div>
+            <div class="col-12 col-lg-10 border-start">
+                <div class="col-12 mt-2 mb-2">
+                    {% if messages %}
+                    {% for content in messages %}
+                    <a href="" class="border rounded d-block p-2 link-underline-opacity-0 link-underline">
+                        <div class="row">
+                            <div class="col-10">
+                                <p class="text-dark">{{ content.created_at }}</p>
+                                <p class="lead text-dark"> {{ content.subject }} </p>
+                            </div>
+                            <div class="col-lg-2 border-start  d-flex justify-content-center align-items-center">
+                                {% if content.message_read %}
+                                <i class="bi bi-envelope-open fs-1"></i>
+                                {% else %}
+                                <i class="bi bi-envelope text-dark  fs-1"></i>
+                                {% endif %}
+                            </div>
+
+                        </div>
+                    </a>
+                    {% endfor %}
+                    {% else %}
+                    <p class="lead">Você não possui nenhuma mensagem.</p>
+                    {% endif %}
+                </div>
+
+            </div>
+        </div>
+
+
+
+    </div>
+</main>
+
+{% endblock content %}

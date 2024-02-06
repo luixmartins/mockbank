@@ -5,7 +5,7 @@ try:
     with connection as conn: 
         cursor = conn.cursor() 
 
-        response = cursor.execute("select * from auth_user")
+        response = cursor.execute("delete from service_transfermodel where sent_by_id = 13")
 except: 
     print('Não conectado')
 

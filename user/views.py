@@ -6,8 +6,8 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.contrib.auth.models import User 
 from django.views.generic.base import TemplateView, View
-from django.views.generic import DetailView, ListView, CreateView
-from django.urls import reverse 
+from django.views.generic import DetailView, ListView
+from django.db.models import Q 
 
 from user import forms 
 from user.models import User as BaseUser, UserMessages
@@ -106,7 +106,7 @@ class ListMessageUser(ListView):
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
 
-        context['messages'] = UserMessages.objects.filter(message_to = self.request.user)
+        context['messages'] = UserMessages.objects.filter(Q(message_to = self.request.user) | Q(message_from = self.request.user))
 
         return context 
     

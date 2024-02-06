@@ -4,7 +4,7 @@
         <div class="navbar text-white align-items-center justify-content-between ">
 
             <div class="col-6 d-flex">
-                <a href="#" class="navbar-brand">
+                <a href={% url "user:profile" %} class="navbar-brand">
                     <i class="bi bi-person-circle text-white fs-2"></i>
                     <h2 class="mt-2 text-white d-inline ms-1">{{ user.first_name }}</h2>
                 </a>

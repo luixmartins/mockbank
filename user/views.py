@@ -88,19 +88,14 @@ class HomePageView(TemplateView):
         return context  
         
 @method_decorator(login_required(login_url='user:login'), name='dispatch')
-class ProfileUser(DetailView): 
-    model = User
-    template_name = 'profile_user.html'  
-    context_object_name = 'user'  
-    slug_field = 'username'
-    slug_url_kwarg = 'username'
+class ProfileUser(View): 
+    def get(self, request): 
+        context = {
+            'user': User.objects.get(username=self.request.user.username), 
+            'base_user': UserService.get_user_app(self.request.user.id)
+        }
 
-    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
-        context =  super().get_context_data(**kwargs)
-
-        context['base_user'] = UserService.get_user_app(self.object.id)
-
-        return context 
+        return render(request, 'profile_user.html', context)
 
 @method_decorator(login_required(login_url='user:login'), name='dispatch')
 class ListMessageUser(ListView): 

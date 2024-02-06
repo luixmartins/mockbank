@@ -1,10 +1,14 @@
 import sqlite3 
 
-connection = sqlite3.connect('db.sqlite3')
+try: 
+    connection = sqlite3.connect('db.sqlite3')
+    with connection as conn: 
+        cursor = conn.cursor() 
 
-with connection as conn: 
-    cursor = conn.cursor() 
+        response = cursor.execute("select * from auth_user")
+except: 
+    print('Não conectado')
 
-    response = cursor.execute("delete from user_user where owner_id = 13")
+
 
 print(response)

@@ -154,7 +154,3 @@ class NewMessageView(View):
         }
 
         return render(request, 'new_message_user.html', context)
-
-
-            
-    

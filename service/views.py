@@ -4,11 +4,14 @@ from django.views.generic.base import View
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.core.paginator import Paginator
+from django.contrib.auth.models import User as DjangoUser 
+
 
 from . import forms 
-from .services import TransferService, SimulateLoanService, ExtractService
-from user.services import UserService
+from service.services import TransferService, SimulateLoanService, ExtractService
 
+from user.services import UserService
+from user.models import FinanceDataUser, User 
 @method_decorator(login_required(login_url='user:login'), name='dispatch')
 class TransferPage(View):
     def get(self, request):
@@ -78,7 +81,7 @@ async def NotLoggedLoan(request):
                 'name': request.POST.get('name'), 
             }
 
-            return render(request, 'response_loan.html', context)
+            return render(request, 'response_not_logged_loan.html', context)
         
         context = {
             'form': form 
@@ -90,6 +93,26 @@ async def NotLoggedLoan(request):
     }
 
     return render(request, 'not_logged_loan.html', context)
+
+
+@login_required(login_url='user:login')
+def LoanSimulateView(request): 
+    if request.method == 'POST': 
+        return render(request, 'loan.html', context)
+    
+    try: 
+        data = FinanceDataUser.objects.get(user=User.objects.get(owner=request.user))
+    except: 
+        data = None 
+
+    if data: 
+        return render(request, 'loan.html') 
+
+    context = { 
+        'form': forms.FinanceDataForm(user = request.user.id)
+    }
+    return render(request, 'finance_data_register.html', context)
+
 
 
 

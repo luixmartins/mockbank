@@ -9,4 +9,5 @@ urlpatterns = [
     path('extract/', views.ExtractAccountView.as_view(), name='extract'), 
     path('loan-simulate/', views.NotLoggedLoan, name='loan_simulate'), 
 
+    path('loan/', views.LoanSimulateView, name='loan'), 
 ]

@@ -13,19 +13,10 @@ class User(models.Model):
     owner = models.OneToOneField(DjangoUser, on_delete=models.CASCADE)
 
 class FinanceDataUser(models.Model):
-    EDUCATION_LEVEL = {
-        'completa': 1, 
-        'incompleta': 0, 
-    }
-    EMPLOYED_STATUS = {
-        'empregado': 1, 
-        'desempregado': 0, 
-    }
-
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, editable=False)
     dependents = models.IntegerField(blank=True, default=0)
-    education = models.IntegerField(choices=EDUCATION_LEVEL, default=0)
-    employed = models.IntegerField(choices=EMPLOYED_STATUS, default=0)
+    education = models.IntegerField(default=0)
+    employed = models.IntegerField(default=0)
     annual_income = models.DecimalField(max_digits=8, decimal_places=2, default=float(0), blank=True)
     score = models.IntegerField(default=500)
     residential_assets = models.DecimalField(max_digits=8, decimal_places=2, default=float(0), blank=True)

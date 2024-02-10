@@ -98,8 +98,15 @@ async def NotLoggedLoan(request):
 @login_required(login_url='user:login')
 def LoanSimulateView(request): 
     if request.method == 'POST': 
-        return render(request, 'loan.html', context)
-    
+        form = forms.FinanceDataForm(request.POST, user=request.user.id)
+
+        if form.is_valid(): 
+            form.save()
+
+            return render(request, 'loan.html')
+        
+        return render(request, 'finance_data_register.html', {'form': form})
+
     try: 
         data = FinanceDataUser.objects.get(user=User.objects.get(owner=request.user))
     except: 

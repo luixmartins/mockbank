@@ -9,5 +9,9 @@ urlpatterns = [
     path('extract/', views.ExtractAccountView.as_view(), name='extract'), 
     path('loan-simulate/', views.NotLoggedLoan, name='loan_simulate'), 
 
-    path('loan/', views.LoanSimulateView, name='loan'), 
+    path('finance_data/contains/', views.FinanceDataUserView.as_view(), name='finance_data_content'),
+    path('loan/', views.LoanView.as_view(), name='loan'),  
+
+    path('verify_loan/', views.loan, name='verify_loan'), 
+    path('confirm_loan/', views.ConfirmLoanView.as_view(), name='confirm_loan'), 
 ]

@@ -10,7 +10,7 @@ from django.views.generic import DetailView, ListView
 from django.db.models import Q 
 
 from user import forms 
-from user.models import User as BaseUser, UserMessages
+from user.models import User as BaseUser, UserMessages, FinanceDataUser
 from user.services import UserService
 
 class LoginUser(View):
@@ -60,7 +60,11 @@ class CreateUser(View):
             member = member_form.save()
             user = user_form.save(commit=False)
 
-            user.owner = member 
+            finance = FinanceDataUser()
+            finance.save()
+
+            user.owner = member
+            user.finance_data = finance 
             user.save()
 
             messages.success(request, f"Sua conta foi criada Sr(a) { member.first_name }, ficamos felizes em ter você aqui!")

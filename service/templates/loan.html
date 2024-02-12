@@ -1,5 +1,31 @@
 {% extends "global/base.html" %}
 
 {% block content %}
-<h1>Simular empréstimo</h1>
+<main>
+    <div class="container mt-5">
+        {% if messages %}
+        {% for message in messages %}
+        <div class= {% if message.tags == 'error' %}"alert alert-danger col-8 text-start mt-5"{% else %} "alert alert-success col-8 text-start mt-5"{% endif %}role="alert">
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+
+        <h2>Realizar empréstimo Mockbank </h2>
+        <hr>
+        <p class="lead">Inicialmente, vamos consultar seus dados e analisar a proposta. Fique tranquilo, é rápido, simples.</p>
+        <div class="row justify-content-center mt-4">
+            <div class="col-12 col-md-10 col-lg-8">
+                <form action= {% url "service:verify_loan" %} method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+
+                    <button class="btn btn-dark" type="submit">Realizar empréstimo</button>
+                </form>
+
+            </div>
+        </div>
+        
+    </div>
+</main>
 {% endblock content %}

@@ -2,7 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User 
 
-from user.models import FinanceDataUser
+from user.models import User as BaseUser 
 
 import uuid 
 
@@ -27,4 +27,4 @@ class LoanModel(models.Model):
     loan_value = models.DecimalField(max_digits=8, decimal_places=2) 
     payment = models.IntegerField() 
     
-    user = models.ForeignKey(FinanceDataUser, on_delete=models.CASCADE)
+    user = models.ForeignKey(BaseUser, on_delete=models.CASCADE)

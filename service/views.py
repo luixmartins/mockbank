@@ -2,16 +2,16 @@ from django.shortcuts import render, redirect
 from django.contrib import messages 
 from django.views.generic.base import View
 from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
+from django.utils.decorators import method_decorator, classonlymethod
 from django.core.paginator import Paginator
-from django.contrib.auth.models import User as DjangoUser 
 
+from asgiref.sync import sync_to_async
+import asyncio 
 
 from . import forms 
-from service.services import TransferService, SimulateLoanService, ExtractService
-
+from service.services import TransferService, SimulateLoanService, ExtractService, GetFinanceDataService
 from user.services import UserService
-from user.models import FinanceDataUser, User 
+from user.models import User 
 @method_decorator(login_required(login_url='user:login'), name='dispatch')
 class TransferPage(View):
     def get(self, request):
@@ -94,32 +94,81 @@ async def NotLoggedLoan(request):
 
     return render(request, 'not_logged_loan.html', context)
 
+@method_decorator(login_required(login_url='user:login'), name='dispatch')
+class FinanceDataUserView(View): 
+    def get(self, request): 
+        user = User.objects.get(owner=request.user)
 
-@login_required(login_url='user:login')
-def LoanSimulateView(request): 
-    if request.method == 'POST': 
-        form = forms.FinanceDataForm(request.POST, user=request.user.id)
+        if user.finance_data.active is False: 
+            context = {
+                'form': forms.FinanceDataForm(user=request.user, instance=user.finance_data)
+            }
+            return render(request, 'finance_data_register.html', context)
+        
+        return redirect('service:loan')
+
+    def post(self, request): 
+        user = User.objects.get(owner=request.user)
+        form = forms.FinanceDataForm(request.POST, user=request.user, instance=user.finance_data) 
 
         if form.is_valid(): 
+            form = form.save(commit=False)
+            
+            form.active = True 
             form.save()
+            messages.success(request, 'Suas informações foram registradas com sucesso!')
 
-            return render(request, 'loan.html')
+            return redirect('service:loan')
+        context = { 
+            'form': form 
+        }
+
+        return render(request, 'finance_data_register.html', context)
+
+@method_decorator(login_required(login_url='user:login'), name='dispatch')
+class LoanView(View): 
+    def get(self, request): 
+        context = {
+            'form': forms.LoanForm()
+        }
+
+        return render(request, 'loan.html', context)
+
+
+@sync_to_async
+def get_user_from_request(request) -> User | None:
+    return request.user if bool(request.user) else None
+
+@sync_to_async
+def get_data(*args, **kwargs) -> dict | None: 
+    data = GetFinanceDataService.get_finance_data(user=kwargs.get('user'), value=kwargs.get('value'), payment=kwargs.get('payment'))
+    
+    return data if data else None 
+
+
+async def loan(request):
+    user = await get_user_from_request(request) 
+    if user: 
+        form = forms.LoanForm(request.POST)
+
+        if form.is_valid(): 
+            data = await get_data(user=user, value=request.POST.get('value'), payment=request.POST.get('payment'))
+
+            response = await SimulateLoanService.simulate_loan_api(data=data)
+            
+            if response is False: 
+                messages.error(request, "Infelizmente não podemos aprovar o valor solicitado neste momento.")
+
+                return render(request, 'loan.html', {'form': form})
         
-        return render(request, 'finance_data_register.html', {'form': form})
+        return render(request, 'loan.html', {'form': form})
+    
+    return redirect('user:login')
 
-    try: 
-        data = FinanceDataUser.objects.get(user=User.objects.get(owner=request.user))
-    except: 
-        data = None 
-
-    if data: 
-        return render(request, 'loan.html') 
-
-    context = { 
-        'form': forms.FinanceDataForm(user = request.user.id)
-    }
-    return render(request, 'finance_data_register.html', context)
-
-
-
+@method_decorator(login_required(login_url='user:login'), name='dispatch')
+class ConfirmLoanView(View): 
+    def get(self, request): 
+        ... 
+    def post(self, request): 
+        ... 
 

@@ -2,6 +2,8 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.contrib.auth import authenticate
 
+import datetime 
+
 from service.models import TransferModel
 from user.models import User 
 
@@ -43,11 +45,6 @@ class DepositForm(forms.ModelForm):
         raise ValidationError("Senha incorreta, tente novamente.") 
     
     def save(self, commit=True):
-        try:
-            if TransferModel.objects.get(received_by=self.user, category='deposit'): 
-                raise "No momento, esta operação pode ser realizada apenas uma vez ao dia"
-        except: 
-            pass 
         instance = super().save(commit=False)
         
         user = User.objects.get(owner=self.user)

@@ -262,8 +262,11 @@ class DepositView(View):
         form = forms.DepositForm(request.POST, user=request.user)
 
         if form.is_valid(): 
-            form.save()
+            if TransferService.verify_deposity_on_day(request.user): 
+                form.save()
 
-            redirect('user:home')
+            messages.error(request, "Neste momento, a operação de depósito pode ser realizada apenas uma vez ao dia.")
+            
+            return redirect('user:home')
             
         return render(request, 'deposit.html', {'form': form})

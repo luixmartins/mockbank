@@ -18,6 +18,11 @@ class TransferService:
         sent_user.save()
         received_user.save() 
 
+    @staticmethod
+    def verify_deposity_on_day(user) -> True: 
+        if TransferModel.objects.filter(sent_by=User.objects.get(owner=user), category='deposit').filter(created_at__date = datetime.date.today()):
+            return False 
+
 class ExtractService: 
     @staticmethod
     def extract_account(filter_type, user_id): 

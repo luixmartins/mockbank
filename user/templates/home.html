@@ -5,16 +5,14 @@
 
 {% block content %}
 <main>
-    
-    {% if messages %}
-        {% for message in messages %}
-        <div class="alert alert-success col-8 text-start mt-5 ms-2" role="alert">
-            <p> {{ message }} </p>                    
-        </div>     
-        {% endfor %}
-    {% endif %}
-
     <section class="container mt-5 mb-5">
+        {% if messages %}
+        {% for message in messages %}
+        <div class= {% if message.tags == 'error' %}"alert alert-danger col-8 text-start mt-5"{% else %} "alert alert-success col-8 text-start mt-5"{% endif %}role="alert">
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
         <div class="col-12 col-md-10 col-lg-8 mx-auto">
             <div class="card">
                 <div class="card-body">
@@ -74,11 +72,11 @@
                     </a>
                 </div>
                 <div class="col-4">
-                    <a href="#"
+                    <a href={% url "service:deposit" %}
                         class="card justify-content-center text-center link-underline-opacity-0 link-underline-opacity-0-hover link-dark"
                         style="height: 100px;">
-                        <i class="bi bi-credit-card-2-front fs-5"></i>
-                        Cartão de crédito
+                        <i class="bi bi-piggy-bank-fill fs-5"></i>
+                        Depósito
                     </a>
                 </div>
                 <div class="col-4">

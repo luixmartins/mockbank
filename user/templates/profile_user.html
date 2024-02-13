@@ -32,6 +32,11 @@
                     <p class="lead ms-2 opacity-75"> {{base_user.user_phone }} </p>
                 </div>
             </div>
+            <hr>
+            <div class="col-12">
+                <h2>Dados Financeiros</h2>
+                <a href={% url "service:finance_data_update" %} class="btn btn-dark">Acessar</a>
+            </div>
             <div class="col-12">
                 <hr>
                 <p class="fs-5">Olá Sr(a) <strong>{{ user.first_name }}</strong>, caso necessite atualizar seus Dados Pessoais, entre em contato com nossa central de atendimento.</p>

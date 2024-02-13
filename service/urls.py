@@ -10,6 +10,7 @@ urlpatterns = [
     path('loan-simulate/', views.NotLoggedLoan, name='loan_simulate'), 
 
     path('finance_data/contains/', views.FinanceDataUserView.as_view(), name='finance_data_content'),
+    path('finance_data/update/', views.FinanceDataUserUpdateView.as_view(), name='finance_data_update'), 
     path('loan/', views.LoanView.as_view(), name='loan'),  
 
     path('verify_loan/', views.loan, name='verify_loan'), 

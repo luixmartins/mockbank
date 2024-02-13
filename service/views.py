@@ -93,7 +93,6 @@ async def NotLoggedLoan(request):
     }
 
     return render(request, 'not_logged_loan.html', context)
-
 @method_decorator(login_required(login_url='user:login'), name='dispatch')
 class FinanceDataUserView(View): 
     def get(self, request): 
@@ -101,7 +100,9 @@ class FinanceDataUserView(View):
 
         if user.finance_data.active is False: 
             context = {
-                'form': forms.FinanceDataForm(user=request.user, instance=user.finance_data)
+                'form': forms.FinanceDataForm(user=request.user, instance=user.finance_data),
+                'subtitle': 'Primeiro, vamos registrar alguns de seus dados financeiros.', 
+                'button': 'Enviar'
             }
             return render(request, 'finance_data_register.html', context)
         
@@ -120,11 +121,42 @@ class FinanceDataUserView(View):
 
             return redirect('service:loan')
         context = { 
-            'form': form 
+            'form': form,
+            'subtitle': 'Primeiro, vamos registrar alguns de seus dados financeiros.', 
+            'button': 'Enviar' 
         }
 
         return render(request, 'finance_data_register.html', context)
+    
+@method_decorator(login_required(login_url='user:login'), name='dispatch')
+class FinanceDataUserUpdateView(View): 
+    def get(self, request): 
+        user = User.objects.get(owner=request.user)
 
+        context = {
+            'form': forms.FinanceDataForm(user=request.user, instance=user.finance_data),
+            'subtitle': 'Atualizar dados', 
+            'button': 'Salvar'
+        }
+        return render(request, 'finance_data_register.html', context)
+
+    def post(self, request): 
+        user = User.objects.get(owner=request.user)
+        form = forms.FinanceDataForm(request.POST, user=request.user, instance=user.finance_data) 
+
+        if form.is_valid(): 
+            form.save()
+            messages.success(request, 'Suas informações foram atualizadas com sucesso!')
+
+            return redirect('user:home')
+        context = { 
+            'form': form,
+            'subtitle': 'Atualizar dados', 
+            'button': 'Salvar'
+        }
+
+        return render(request, 'finance_data_register.html', context)
+    
 @method_decorator(login_required(login_url='user:login'), name='dispatch')
 class LoanView(View): 
     def get(self, request): 
@@ -167,9 +199,7 @@ async def loan(request):
             else: 
                 messages.error(request, "Infelizmente não podemos aprovar o valor solicitado neste momento.")
 
-                return render(request, 'loan.html', {'form': form})
-
-            
+                return render(request, 'loan.html', {'form': form})            
         
         return render(request, 'loan.html', {'form': form})
     

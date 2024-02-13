@@ -26,5 +26,6 @@ class LoanModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, editable=False) 
     loan_value = models.DecimalField(max_digits=8, decimal_places=2) 
     payment = models.IntegerField() 
+    active = models.BooleanField(default=False)
     
     user = models.ForeignKey(BaseUser, on_delete=models.CASCADE)

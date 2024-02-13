@@ -9,7 +9,7 @@ from asgiref.sync import sync_to_async
 import asyncio 
 
 from . import forms 
-from service.services import TransferService, SimulateLoanService, ExtractService, GetFinanceDataService
+from service.services import TransferService, SimulateLoanService, ExtractService, GetFinanceDataService, CreateNewLoanService
 from user.services import UserService
 from user.models import User 
 @method_decorator(login_required(login_url='user:login'), name='dispatch')
@@ -156,10 +156,20 @@ async def loan(request):
 
             response = await SimulateLoanService.simulate_loan_api(data=data)
             
-            if response is False: 
+            if response is True: 
+                request.session['data'] = {
+                    'value': request.POST.get('value'), 
+                    'payment': request.POST.get('payment'), 
+                }
+
+                return redirect('service:confirm_loan')
+
+            else: 
                 messages.error(request, "Infelizmente não podemos aprovar o valor solicitado neste momento.")
 
                 return render(request, 'loan.html', {'form': form})
+
+            
         
         return render(request, 'loan.html', {'form': form})
     
@@ -168,7 +178,41 @@ async def loan(request):
 @method_decorator(login_required(login_url='user:login'), name='dispatch')
 class ConfirmLoanView(View): 
     def get(self, request): 
-        ... 
+        form = forms.ConfirmLoanForm(user=request.user)
+
+        context = {
+            'value': request.session['data'].get('value'), 
+            'payment': request.session['data'].get('payment'), 
+            'form': form, 
+        }
+
+        return render(request, 'confirm_loan.html', context)
+    
     def post(self, request): 
-        ... 
+        form = forms.ConfirmLoanForm(request.POST, user=request.user)
+
+        if form.is_valid(): 
+            value = request.session['data'].get('value')
+            payment = request.session['data'].get('payment')
+
+            response = CreateNewLoanService.create_loan(user=request.user, value=value, payment=payment)
+
+            if response is not False: 
+                messages.success(request, "Seu empréstimo foi realizado com sucesso! Em breve, o valor será debitado na sua conta.")
+
+                del request.session['data']
+
+                return redirect('user:home')
+            
+            messages.error(request, "A operação pode ser realizada apenas uma vez por dia.")
+            
+            return redirect('service:loan')
+        
+        context = {
+            'value': request.session['data'].get('value'), 
+            'payment': request.session['data'].get('payment'), 
+            'form': form, 
+        }
+
+        return render(request, 'confirm_loan.html', context)
 

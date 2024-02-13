@@ -21,6 +21,8 @@ class LoginUser(View):
             user = form.get_user()
             auth.login(request, user)
 
+            UserService.verify_new_loan(user)
+
             return redirect('user:home')
         
         context = {

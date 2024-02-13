@@ -1,4 +1,6 @@
 from user.models import User as BaseUser 
+from service.models import LoanModel
+
 from django.contrib.auth.models import User 
 
 class UserService:
@@ -24,4 +26,18 @@ class UserService:
             'limit': limit, 
             'used_limit': user.account_limit - (user.account_balance + user.account_limit), 
         }
+    
+    @staticmethod 
+    def verify_new_loan(user):
+        user = BaseUser.objects.get(owner=user)
+        try: 
+            response = LoanModel.objects.get(user=user, active=False)
+        
+            user.account_balance += response.loan_value
+            user.save()
+
+            response.active = True 
+            response.save()
+        except: 
+            pass 
 

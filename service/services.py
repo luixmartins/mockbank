@@ -1,9 +1,10 @@
 from django.db.models import Q 
 
 from user.models import User 
-from service.models import TransferModel 
+from service.models import TransferModel, LoanModel
 
 import httpx 
+import datetime 
 
 class TransferService: 
     @staticmethod
@@ -78,4 +79,17 @@ class GetFinanceDataService:
                 'patrimonio_luxo': float(response.finance_data.luxury_assets), 
                 'patrimonio_bancario': float(response.finance_data.bank_assets), 
             } 
-        
+
+class CreateNewLoanService: 
+    @staticmethod
+    def create_loan(**kwargs): 
+        user = User.objects.get(owner=kwargs.get('user'))
+        value = kwargs.get('value')
+        payment = kwargs.get('payment')
+        try: 
+            queryset = LoanModel.objects.get(created_at__date = datetime.date.today())
+            
+            return False 
+        except: 
+            return LoanModel.objects.create(user=user, loan_value=value, payment=payment) 
+

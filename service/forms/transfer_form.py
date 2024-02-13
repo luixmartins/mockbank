@@ -18,7 +18,8 @@ class TransferForm(forms.ModelForm):
         
         super(TransferForm, self).__init__(*args, **kwargs)
 
-        self.from_user = from_user 
+        self.from_user = BaseUser.objects.get(owner=from_user)
+
         self.fields['value'].widget.attrs.update({
                 'class': 'form-control', 
                 'id': 'txtValue', 
@@ -36,9 +37,8 @@ class TransferForm(forms.ModelForm):
 
     def clean_value(self):
         value = self.cleaned_data['value']
-        base_user = BaseUser.objects.get(owner=self.from_user.id)
         
-        if value > (base_user.account_balance + base_user.account_limit):
+        if value > (self.from_user.account_balance + self.from_user.account_limit):
             raise ValidationError('Você não possui saldo suficiente para realizar esta transação.') 
 
         return value   
@@ -46,7 +46,7 @@ class TransferForm(forms.ModelForm):
     def clean_received_by_username(self): 
         username = self.cleaned_data['received_by_username']
         try:
-            user = User.objects.get(username=username)
+            user = BaseUser.objects.get(owner=User.objects.get(username=username))
         except User.DoesNotExist:
             raise ValidationError('O contato informado não existe ou é inválido.')
 
@@ -58,7 +58,7 @@ class TransferForm(forms.ModelForm):
     def clean_password(self): 
         password = self.cleaned_data['password']
  
-        auth = authenticate(username=self.from_user.username, password=password)
+        auth = authenticate(username=self.from_user.owner.username, password=password)
         
         if auth: 
             return password

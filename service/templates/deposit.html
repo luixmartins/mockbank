@@ -1,0 +1,31 @@
+{% extends "global/base.html" %}
+
+{% block content %}
+<main>
+    <div class="container mt-5">
+        <h2>Realizar depósito Mockbank </h2>
+        <hr>
+        <div class="row justify-content-center mt-4">
+            <div class="col-12 col-md-10 col-lg-8">
+                <form action="" method="post">
+                    {% csrf_token %}
+
+                    {{ form.non_field_errors }}
+                    
+                    <p> {{ form.value.errors }}</p>
+                    <div class="form-floating mb-3">
+                        {{ form.value }}
+                        <label for="passwordInput"> {{ form.value.label }}</label>
+                    </div>
+                    <p> {{ form.password.errors }}</p>
+                    <div class="form-floating mb-3">
+                        {{ form.password }}
+                        <label for="passwordInput"> {{ form.password.label }}</label>
+                    </div>
+                    <button class="btn btn-dark" type="submit">Realizar depósito</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock content %}

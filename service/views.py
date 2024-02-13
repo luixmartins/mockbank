@@ -30,7 +30,7 @@ class TransferPage(View):
             
             data = {
                 'sent_user': self.request.user.id, 
-                'received_user': transfer_to.id, 
+                'received_user': transfer_to.owner.id, 
                 'value': form.cleaned_data['value'], 
             }
             
@@ -38,7 +38,7 @@ class TransferPage(View):
 
             form.save()
 
-            messages.success(request, f"Você realizou uma transferência para { transfer_to.username }.")
+            messages.success(request, f"Você realizou uma transferência para { transfer_to.owner.username }.")
             
             return redirect('user:home')
         
@@ -58,7 +58,9 @@ class ExtractAccountView(View):
 
         filter_type = form['filter_type'].value() if form.is_valid() else 'all' 
 
-        queryset = ExtractService.extract_account(filter_type=filter_type, user_id=request.user.id)
+        user = User.objects.get(owner=request.user)
+
+        queryset = ExtractService.extract_account(filter_type=filter_type, user_id=user.user_id)
         paginator = Paginator(queryset, 8)
         page_number = request.GET.get("page")
 
@@ -246,3 +248,22 @@ class ConfirmLoanView(View):
 
         return render(request, 'confirm_loan.html', context)
 
+
+@method_decorator(login_required(login_url='user:login'), name='dispatch')
+class DepositView(View): 
+    
+    def get(self, request): 
+        context = {
+            'form': forms.DepositForm(user=request.user)
+        }
+        return render(request, 'deposit.html', context)
+    
+    def post(self, request): 
+        form = forms.DepositForm(request.POST, user=request.user)
+
+        if form.is_valid(): 
+            form.save()
+
+            redirect('user:home')
+            
+        return render(request, 'deposit.html', {'form': form})

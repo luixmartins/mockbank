@@ -28,9 +28,9 @@
                                                 <p class="opacity-75">{{ item.transfer_id }}</p>
 
                                                 {% if item.received_by == user %}
-                                                <p>Entrada - <strong>{{ item.sent_by }}</strong> em {{ item.created_at }}</p>
+                                                <p>Entrada - <strong>{{ item.sent_by.owner }}</strong> em {{ item.created_at }}</p>
                                                 {% else %}
-                                                <p>Saída - transferência para <strong>{{ item.received_by }}</strong> em {{ item.created_at }}</p>
+                                                <p>Saída - transferência para <strong>{{ item.received_by.owner }}</strong> em {{ item.created_at }}</p>
                                                 {% endif %}
                                             </div>
                                             <div class="col-4 col-sm-3 text-end my-auto">

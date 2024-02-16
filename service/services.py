@@ -19,17 +19,19 @@ class TransferService:
         received_user.save() 
 
     @staticmethod
-    def verify_deposity_on_day(user) -> True: 
+    def verify_deposity_on_day(user) -> bool: 
         if TransferModel.objects.filter(sent_by=User.objects.get(owner=user), category='deposit').filter(created_at__date = datetime.date.today()):
             return False 
+        return True 
+
 
 class ExtractService: 
     @staticmethod
     def extract_account(filter_type, user_id): 
         if filter_type == "sent": 
-            return TransferModel.objects.filter(sent_by=user_id)
+            return TransferModel.objects.filter(sent_by=user_id, category='transfer')
         elif filter_type == "received": 
-            return TransferModel.objects.filter(received_by=user_id)
+            return TransferModel.objects.filter(Q(received_by=user_id) | (Q(category='deposit') & Q(sent_by=user_id)))
         else: 
             return TransferModel.objects.filter(Q(sent_by=user_id) | Q(received_by=user_id))
             

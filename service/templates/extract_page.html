@@ -27,14 +27,16 @@
                                             <div class="col-8 col-sm-9 mt-1 ">
                                                 <p class="opacity-75">{{ item.transfer_id }}</p>
 
-                                                {% if item.received_by == user %}
-                                                <p>Entrada - <strong>{{ item.sent_by.owner }}</strong> em {{ item.created_at }}</p>
-                                                {% else %}
+                                                {% if item.category == 'deposit' %}
+                                                <p>Entrada - <strong>Depósito</strong> em {{ item.created_at }}</p>
+                                                {% elif item.sent_by.owner == user %}
                                                 <p>Saída - transferência para <strong>{{ item.received_by.owner }}</strong> em {{ item.created_at }}</p>
+                                                {% else %}
+                                                <p>Entrada - <strong>{{ item.sent_by.owner }}</strong> em {{ item.created_at }}</p>
                                                 {% endif %}
                                             </div>
                                             <div class="col-4 col-sm-3 text-end my-auto">
-                                                {% if item.received_by == user %}
+                                                {% if item.category == 'deposit' or item.received_by.owner == user %}
                                                 <p class="text-success my-auto lead"> R$ {{item.value}} </p> 
                                                 {% else %}
                                                 <p class="text-danger my-auto lead"> R$ {{item.value}} </p> 

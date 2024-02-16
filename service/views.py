@@ -264,6 +264,9 @@ class DepositView(View):
         if form.is_valid(): 
             if TransferService.verify_deposity_on_day(request.user): 
                 form.save()
+                messages.success(request, 'Depósito realizado com sucesso!')
+
+                return redirect('user:home')
 
             messages.error(request, "Neste momento, a operação de depósito pode ser realizada apenas uma vez ao dia.")
             

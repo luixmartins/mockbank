@@ -53,9 +53,12 @@ class DepositForm(forms.ModelForm):
         instance.category = 'deposit'
 
         user.account_balance += self.cleaned_data['value']
+        if user.finance_data.score < 1000: 
+            user.finance_data.score += 10
 
         if commit:
             instance.save()
+            user.finance_data.save()
             user.save()
 
         return instance

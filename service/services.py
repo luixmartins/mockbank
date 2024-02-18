@@ -14,7 +14,10 @@ class TransferService:
 
         sent_user.account_balance -= data['value']
         received_user.account_balance += data['value']
-
+        if sent_user.finance_data.score < 1000: 
+            sent_user.finance_data.score += 10
+        
+        sent_user.finance_data.save()
         sent_user.save()
         received_user.save() 
 
